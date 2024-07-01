@@ -17,7 +17,7 @@ services:
             - ./:/var/www
             - ~/.ssh:/home/.ssh
         networks:
-            - pizzeria
+            - ${APP_NAME}
         depends_on:
             - mysql
 
@@ -35,7 +35,7 @@ services:
         ports:
             - "8000:80"
         networks:
-            - pizzeria
+            - ${APP_NAME}
         depends_on:
             - php
 
@@ -59,7 +59,7 @@ services:
             - ./docker-compose/mysql:/docker-entrypoint-initdb.d
             - ./data/mysql:/var/lib/mysql
         networks:
-            - pizzeria
+            - ${APP_NAME}
 
     # Database management
     pma:
@@ -76,14 +76,14 @@ services:
         ports:
             - ${DB_PMA_PORT}:80
         networks:
-            - pizzeria
+            - ${APP_NAME}
         depends_on:
             - mysql
 
     # Mailing Server
     mailhog:
         image: mailhog/mailhog
-        container_name: "pizzeria_mailhog"
+        container_name: "${APP_NAME}_mailhog"
         env_file:
             - ./.env
         logging:
@@ -91,17 +91,17 @@ services:
         ports:
             - 8025:8025
         networks:
-            - pizzeria
+            - ${APP_NAME}
 
     redis:
         image: redis:alpine
-        container_name: "pizzeria_redis"
+        container_name: "${APP_NAME}_redis"
         env_file:
             - ./.env
         ports: 
             - ${REDIS_PORT}:${REDIS_PORT}
         networks:
-            - pizzeria
+            - ${APP_NAME}
 
 networks:
     pizzeria:
